@@ -23,12 +23,19 @@
    </httpHeaderProperties>
    <migratedVersion>5.4.1</migratedVersion>
    <restRequestMethod>POST</restRequestMethod>
-   <restUrl>https://api.trello.com/1/cards/5dd2a0d01ac54e435ad34bbe/actions/comments?key=05e8bad7e1cf44de2eb17334214171b9&amp;token=f273511bed7694835a3844c4d5ea2f1477238f0baccfc5c4564b6f436ed71199&amp;text=comment again</restUrl>
+   <restUrl>https://api.trello.com/1/cards/${cardID}/actions/comments?key=05e8bad7e1cf44de2eb17334214171b9&amp;token=f273511bed7694835a3844c4d5ea2f1477238f0baccfc5c4564b6f436ed71199&amp;text=comment from chaind!</restUrl>
    <serviceType>RESTful</serviceType>
    <soapBody></soapBody>
    <soapHeader></soapHeader>
    <soapRequestMethod></soapRequestMethod>
    <soapServiceFunction></soapServiceFunction>
+   <variables>
+      <defaultValue>GlobalVariable.cardID</defaultValue>
+      <description></description>
+      <id>6d4fb8b6-5a4c-4cec-b2ea-8aac1685b930</id>
+      <masked>false</masked>
+      <name>cardID</name>
+   </variables>
    <verificationScript>import static org.assertj.core.api.Assertions.*
 
 import com.kms.katalon.core.testobject.RequestObject
@@ -42,6 +49,12 @@ import internal.GlobalVariable as GlobalVariable
 RequestObject request = WSResponseManager.getInstance().getCurrentRequest()
 
 ResponseObject response = WSResponseManager.getInstance().getCurrentResponse()
-</verificationScript>
+
+
+
+
+WS.verifyResponseStatusCode(response, 200)
+
+assertThat(response.getStatusCode()).isEqualTo(200)</verificationScript>
    <wsdlAddress></wsdlAddress>
 </WebServiceRequestEntity>

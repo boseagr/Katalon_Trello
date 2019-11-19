@@ -14,20 +14,29 @@ import com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords as WS
 import com.kms.katalon.core.webui.keyword.WebUiBuiltInKeywords as WebUI
 import com.kms.katalon.core.windows.keyword.WindowsBuiltinKeywords as Windows
 import internal.GlobalVariable as GlobalVariable
+import groovy.json.JsonSlurper as JsonSlurper
 
-test = WS.sendRequestAndVerify(findTestObject('UserRestService/listUser'))
+listID = WS.sendRequestAndVerify(findTestObject('Trello/Board/Get All Board'))
 
-WS.sendRequestAndVerify(findTestObject('UserRestService/update user'))
+def slurper = new JsonSlurper()
 
-WS.sendRequestAndVerify(findTestObject('UserRestService/delete user'))
+def result = slurper.parseText(listID.getResponseBodyContent())
 
-String xml1 = test.responseBodyContent
+GlobalVariable.listID = result[1].lists[2].id
 
-def dataVal = new XmlSlurper().parseText(xml1)
+cardID = WS.sendRequestAndVerify(findTestObject('Trello/Card/Add Card'))
 
-def contrycode = dataVal.pathOfXML.text()
+def result2 = slurper.parseText(cardID.getResponseBodyContent())
 
-GlobalVariable.contry = contrycode
+GlobalVariable.cardID = result2.id
 
-WS.sendRequestAndVerify(findTestObject('UserRestService/create user'))
+WS.sendRequestAndVerify(findTestObject('Trello/Card/Add comment'))
+
+commentID = WS.sendRequestAndVerify(findTestObject('Trello/Card/Add comment', [('cardID') : GlobalVariable.cardID]))
+
+def result3 = slurper.parseText(commentID.getResponseBodyContent())
+
+GlobalVariable.commentID = result3.id
+
+WS.sendRequestAndVerify(findTestObject('Trello/Card/Update comment'))
 
